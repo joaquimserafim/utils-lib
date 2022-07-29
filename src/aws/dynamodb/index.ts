@@ -32,9 +32,3 @@ export const scan = async <T = unknown>(
 
 	return { data, lastKey };
 };
-
-//
-//
-//
-
-export const get = () => 1;
