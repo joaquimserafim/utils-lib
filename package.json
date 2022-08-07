@@ -43,6 +43,7 @@
 	"license": "UNLICENSED",
 	"dependencies": {
 		"@aws-sdk/client-dynamodb": "^3.131.0",
+		"@aws-sdk/lib-dynamodb": "^3.142.0",
 		"@aws-sdk/util-dynamodb": "^3.131.0",
 		"abort-controller": "^3.0.0",
 		"node-fetch": "^2.6.7"

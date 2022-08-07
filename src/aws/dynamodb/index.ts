@@ -1,6 +1,13 @@
 import { client } from "./client";
 import { ScanCommand } from "@aws-sdk/client-dynamodb";
+import {
+	GetCommand,
+	GetCommandInput,
+	UpdateCommand,
+	UpdateCommandInput,
+} from "@aws-sdk/lib-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { ReturnValue } from "@aws-sdk/client-dynamodb";
 
 //
 // scan data by batches
@@ -31,4 +38,70 @@ export const scan = async <T = unknown>(
 	const lastKey = unmarshall(lastEvaluatedKey || {}).id;
 
 	return { data, lastKey };
+};
+
+//
+//
+//
+
+export const getItem = async <T = undefined>(
+	tableName: string,
+	id: string,
+	attributes?: string[]
+): Promise<T> => {
+	const params: GetCommandInput = {
+		Key: { id },
+		ProjectionExpression: attributes?.join(","),
+		TableName: tableName,
+	};
+
+	const { Item } = await client.send(new GetCommand(params));
+
+	return Item as T;
+};
+
+//
+//
+//
+
+export enum ReturnValueOptions {
+	AllNew = "ALL_NEW",
+	AllOld = "ALL_OLD",
+	None = "NONE",
+	UpdatedNew = "UPDATED_NEW",
+	UpdatedOld = "UPDATED_OLD",
+}
+
+export interface UpdateItemProps {
+	readonly expressionAttributeNames: Record<string, string>;
+	readonly updateExpression: string;
+	readonly expressionAttributeValues: Record<string, unknown>;
+	readonly conditionExpression?: string;
+	readonly returnValues?: ReturnValue;
+}
+
+export const updateItem = async <T = unknown>(
+	tableName: string,
+	id: string,
+	{
+		expressionAttributeNames,
+		updateExpression,
+		expressionAttributeValues,
+		conditionExpression,
+		returnValues,
+	}: UpdateItemProps
+): Promise<T | 0> => {
+	const params: UpdateCommandInput = {
+		TableName: tableName,
+		Key: { id },
+		ExpressionAttributeNames: expressionAttributeNames,
+		UpdateExpression: updateExpression,
+		ExpressionAttributeValues: expressionAttributeValues,
+		ConditionExpression: conditionExpression,
+		ReturnValues: returnValues || "NONE",
+	};
+
+	const { Attributes } = await client.send(new UpdateCommand(params));
+
+	return returnValues?.length ? <T>Attributes : 0;
 };
