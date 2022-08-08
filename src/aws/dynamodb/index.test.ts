@@ -20,7 +20,7 @@ jest.mock("./client");
 //
 //
 
-describe("testign dynamodb lib", () => {
+describe("testing dynamodb lib", () => {
 	const item = {
 		id: "123",
 		user: "Foo",
