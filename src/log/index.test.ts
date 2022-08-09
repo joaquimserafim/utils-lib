@@ -52,7 +52,7 @@ describe("Testing the `log` lib", () => {
 				"awsRequestId",
 				"entry",
 				"origin",
-				"stage",
+				"env",
 				"timestamp",
 				"type",
 				"version",
@@ -72,7 +72,7 @@ describe("Testing the `log` lib", () => {
 				"awsRequestId",
 				"entry",
 				"origin",
-				"stage",
+				"env",
 				"timestamp",
 				"type",
 				"version",
@@ -93,12 +93,32 @@ describe("Testing the `log` lib", () => {
 				"awsRequestId",
 				"entry",
 				"origin",
-				"stage",
+				"env",
 				"timestamp",
 				"type",
 				"version",
 			]);
 			expect(typeof record.entry).toBe("object");
+		});
+
+		test("Processing a log entry with an `info` message:object", () => {
+			logger({ id: "1234567890", extraId: "foo£bar" }).info({
+				body: { hello: "world" },
+			});
+
+			const record = JSON.parse(captureOutput);
+
+			expect(Object.keys(record)).toEqual([
+				"api",
+				"id",
+				"extraId",
+				"entry",
+				"origin",
+				"env",
+				"timestamp",
+				"type",
+				"version",
+			]);
 		});
 	});
 });

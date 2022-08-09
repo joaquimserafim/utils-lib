@@ -21,11 +21,12 @@ export const log =
 	(id: { [key: string]: string }): LogProps => {
 		const print = (type: string) => (entry: unknown) =>
 			process.stdout.write(
-				`{"api":"${API}","${Object.keys(id)[0]}":"${
-					Object.values(id)[0]
-				}","entry":${JSON.stringify(
+				`{"api":"${API}"${Object.keys(id).reduce(
+					(acc, curr) => acc + `,"${curr}":"${id[curr]}"`,
+					""
+				)},"entry":${JSON.stringify(
 					entry
-				)},"origin":"${origin}","stage":"${ENV}","timestamp":"${new Date().toISOString()}","type":"${type}","version":"${VERSION}"}\n`
+				)},"origin":"${origin}","env":"${ENV}","timestamp":"${new Date().toISOString()}","type":"${type}","version":"${VERSION}"}\n`
 			);
 
 		return {
