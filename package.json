@@ -1,6 +1,6 @@
 {
 	"name": "@kamoa/utils-lib",
-	"version": "1.4.0",
+	"version": "1.5.0",
 	"main": "build/index.js",
 	"types": "build/index.d.ts",
 	"files": ["README.md", "build/**/*"],
@@ -18,12 +18,12 @@
 		"prepare": "husky install && npm run build"
 	},
 	"devDependencies": {
-		"@types/aws-lambda": "^8.10.101",
+		"@types/aws-lambda": "^8.10.102",
 		"@types/jest": "^28.1.6",
-		"@types/node": "18.6.4",
+		"@types/node": "18.7.2",
 		"@types/node-fetch": "^2.6.2",
-		"@typescript-eslint/eslint-plugin": "^5.32.0",
-		"@typescript-eslint/parser": "^5.32.0",
+		"@typescript-eslint/eslint-plugin": "^5.33.0",
+		"@typescript-eslint/parser": "^5.33.0",
 		"eslint": "^8.21.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-node": "^11.1.0",
@@ -39,9 +39,9 @@
 	},
 	"license": "UNLICENSED",
 	"dependencies": {
-		"@aws-sdk/client-dynamodb": "^3.142.0",
-		"@aws-sdk/lib-dynamodb": "^3.142.0",
-		"@aws-sdk/util-dynamodb": "^3.142.0",
+		"@aws-sdk/client-dynamodb": "^3.145.0",
+		"@aws-sdk/lib-dynamodb": "^3.145.0",
+		"@aws-sdk/util-dynamodb": "^3.145.0",
 		"abort-controller": "^3.0.0",
 		"node-fetch": "^2.6.7"
 	},
