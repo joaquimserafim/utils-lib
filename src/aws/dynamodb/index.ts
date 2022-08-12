@@ -98,7 +98,7 @@ export const query = async <T = undefined>(
 
 	const { Items } = await client.send(new QueryCommand(params));
 
-	return Items as T[];
+	return (Items || []) as T[];
 };
 
 //

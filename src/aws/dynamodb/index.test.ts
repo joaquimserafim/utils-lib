@@ -190,24 +190,14 @@ describe("testing dynamodb lib", () => {
 			]);
 		});
 
-		it("should find and return an item", async () => {
+		it("should return an empty [] when not find", async () => {
 			expect.hasAssertions();
-			(client.send as jest.Mock).mockResolvedValue({});
 
-			await expect(getItem<User>("table", "123")).resolves.toEqual(
-				undefined
-			);
-		});
-
-		it("should find and return an item with the selected attributes", async () => {
-			expect.hasAssertions();
 			(client.send as jest.Mock).mockResolvedValue({
-				Item: { id: "123" },
+				Items: undefined,
 			});
 
-			await expect(
-				getItem<User>("table", "123", ["id"])
-			).resolves.toEqual({ id: "123" });
+			await expect(query<User[]>("table", params)).resolves.toEqual([]);
 		});
 	});
 });
