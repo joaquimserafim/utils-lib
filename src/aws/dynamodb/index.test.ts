@@ -2,6 +2,8 @@ import { marshall } from "@aws-sdk/util-dynamodb";
 import { client } from "./client";
 import {
 	getItem,
+	query,
+	QueryProps,
 	ReturnValueOptions,
 	scan,
 	updateItem,
@@ -156,6 +158,56 @@ describe("testing dynamodb lib", () => {
 					returnValues: ReturnValueOptions.AllNew,
 				})
 			).resolves.toEqual({ id: "123", name: "foo bar" });
+		});
+	});
+
+	describe("testing mormal query cmd", () => {
+		const params: QueryProps = {
+			keyConditionExpression: "id = :id",
+			expressionAttributeValues: {
+				":id": "123",
+			},
+		};
+
+		it("should return an error", async () => {
+			expect.hasAssertions();
+			(client.send as jest.Mock).mockRejectedValueOnce("some error");
+
+			await expect(query<User>("table", params)).rejects.toBe(
+				"some error"
+			);
+		});
+
+		it("should find and return some items", async () => {
+			expect.hasAssertions();
+
+			(client.send as jest.Mock).mockResolvedValue({
+				Items: [user],
+			});
+
+			await expect(query<User[]>("table", params)).resolves.toEqual([
+				user,
+			]);
+		});
+
+		it("should find and return an item", async () => {
+			expect.hasAssertions();
+			(client.send as jest.Mock).mockResolvedValue({});
+
+			await expect(getItem<User>("table", "123")).resolves.toEqual(
+				undefined
+			);
+		});
+
+		it("should find and return an item with the selected attributes", async () => {
+			expect.hasAssertions();
+			(client.send as jest.Mock).mockResolvedValue({
+				Item: { id: "123" },
+			});
+
+			await expect(
+				getItem<User>("table", "123", ["id"])
+			).resolves.toEqual({ id: "123" });
 		});
 	});
 });

@@ -3,6 +3,8 @@ import { ScanCommand } from "@aws-sdk/client-dynamodb";
 import {
 	GetCommand,
 	GetCommandInput,
+	QueryCommand,
+	QueryCommandInput,
 	UpdateCommand,
 	UpdateCommandInput,
 } from "@aws-sdk/lib-dynamodb";
@@ -58,6 +60,42 @@ export const getItem = async <T = undefined>(
 	const { Item } = await client.send(new GetCommand(params));
 
 	return Item as T;
+};
+
+//
+//
+//
+
+export interface QueryProps {
+	readonly keyConditionExpression: string;
+	readonly expressionAttributeNames?: Record<string, string>;
+	readonly expressionAttributeValues: Record<string, unknown>;
+	readonly filterExpression?: string;
+	readonly projectionExpression?: string;
+}
+
+export const query = async <T = undefined>(
+	tableName: string,
+	{
+		keyConditionExpression,
+		expressionAttributeNames,
+		expressionAttributeValues,
+		filterExpression,
+		projectionExpression,
+	}: QueryProps
+): Promise<T[]> => {
+	const params: QueryCommandInput = {
+		TableName: tableName,
+		ExpressionAttributeNames: expressionAttributeNames,
+		ExpressionAttributeValues: expressionAttributeValues,
+		KeyConditionExpression: keyConditionExpression,
+		FilterExpression: filterExpression,
+		ProjectionExpression: projectionExpression,
+	};
+
+	const { Items } = await client.send(new QueryCommand(params));
+
+	return Items as T[];
 };
 
 //
