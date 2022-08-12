@@ -72,6 +72,7 @@ export interface QueryProps {
 	readonly expressionAttributeValues: Record<string, unknown>;
 	readonly filterExpression?: string;
 	readonly projectionExpression?: string;
+	readonly indexName?: string;
 }
 
 export const query = async <T = undefined>(
@@ -82,6 +83,7 @@ export const query = async <T = undefined>(
 		expressionAttributeValues,
 		filterExpression,
 		projectionExpression,
+		indexName,
 	}: QueryProps
 ): Promise<T[]> => {
 	const params: QueryCommandInput = {
@@ -91,6 +93,7 @@ export const query = async <T = undefined>(
 		KeyConditionExpression: keyConditionExpression,
 		FilterExpression: filterExpression,
 		ProjectionExpression: projectionExpression,
+		IndexName: indexName,
 	};
 
 	const { Items } = await client.send(new QueryCommand(params));
