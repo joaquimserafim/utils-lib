@@ -71,7 +71,7 @@ export interface QueryProps {
 	readonly expressionAttributeNames?: Record<string, string>;
 	readonly expressionAttributeValues: Record<string, unknown>;
 	readonly filterExpression?: string;
-	readonly projectionExpression?: string;
+	readonly attributes?: string[];
 	readonly indexName?: string;
 }
 
@@ -82,7 +82,7 @@ export const query = async <T = undefined>(
 		expressionAttributeNames,
 		expressionAttributeValues,
 		filterExpression,
-		projectionExpression,
+		attributes,
 		indexName,
 	}: QueryProps
 ): Promise<T[]> => {
@@ -92,7 +92,7 @@ export const query = async <T = undefined>(
 		ExpressionAttributeValues: expressionAttributeValues,
 		KeyConditionExpression: keyConditionExpression,
 		FilterExpression: filterExpression,
-		ProjectionExpression: projectionExpression,
+		ProjectionExpression: attributes?.join(","),
 		IndexName: indexName,
 	};
 
