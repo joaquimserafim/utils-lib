@@ -1,6 +1,6 @@
 {
 	"name": "@kamoa/utils-lib",
-	"version": "1.7.1",
+	"version": "1.7.2",
 	"main": "build/index.js",
 	"types": "build/index.d.ts",
 	"files": ["README.md", "build/**/*"],

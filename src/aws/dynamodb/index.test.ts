@@ -62,7 +62,7 @@ describe("testing dynamodb lib", () => {
 
 			await expect(scan("test")).resolves.toEqual({
 				data: [item],
-				lastKey: undefined,
+				lastKey: {},
 			});
 		});
 
@@ -75,7 +75,7 @@ describe("testing dynamodb lib", () => {
 				scan("test", { exclusiveStartKey: "123" })
 			).resolves.toEqual({
 				data: [item],
-				lastKey: undefined,
+				lastKey: {},
 			});
 		});
 
@@ -88,7 +88,7 @@ describe("testing dynamodb lib", () => {
 				scan("test", { exclusiveStartKey: "123" })
 			).resolves.toEqual({
 				data: [],
-				lastKey: undefined,
+				lastKey: {},
 			});
 		});
 	});
