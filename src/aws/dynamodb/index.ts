@@ -71,6 +71,8 @@ export const scan = async <T = unknown>(
 	const { Items: items, LastEvaluatedKey: lastEvaluatedKey } =
 		await client.send(command);
 
+	process.stdout.write(JSON.stringify({ items, lastEvaluatedKey }));
+
 	const data = (items || []).map((item) => unmarshall(item) as T);
 	const lastKey = unmarshall(lastEvaluatedKey || {}).id;
 
