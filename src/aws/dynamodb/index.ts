@@ -1,5 +1,4 @@
 import { client } from "./client";
-import { ScanCommand } from "@aws-sdk/client-dynamodb";
 import {
 	GetCommand,
 	GetCommandInput,
@@ -7,6 +6,7 @@ import {
 	QueryCommandInput,
 	UpdateCommand,
 	UpdateCommandInput,
+	ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ReturnValue } from "@aws-sdk/client-dynamodb";
@@ -31,17 +31,41 @@ interface ScanOutput<T> {
 	readonly lastKey?: string;
 }
 
+interface ScanParams {
+	readonly exclusiveStartKey?: string;
+	readonly limit?: number;
+	readonly expressionAttributeNames?: Record<string, string>;
+	readonly expressionAttributeValues?: Record<string, unknown>;
+	readonly filterExpression?: string;
+	readonly attributes?: string[];
+	readonly indexName?: string;
+}
+
 export const scan = async <T = unknown>(
 	tableName: string,
-	key?: string,
-	limit?: number
+	params?: ScanParams
 ): Promise<ScanOutput<T>> => {
-	const filter = key ? { ExclusiveStartKey: marshall({ id: key }) } : {};
+	const {
+		exclusiveStartKey,
+		limit,
+		expressionAttributeNames,
+		expressionAttributeValues,
+		filterExpression,
+		indexName,
+		attributes,
+	} = params || {};
 
 	const command = new ScanCommand({
 		TableName: tableName,
 		Limit: limit || 25,
-		...filter,
+		ExpressionAttributeNames: expressionAttributeNames,
+		ExpressionAttributeValues: expressionAttributeValues,
+		FilterExpression: filterExpression,
+		ProjectionExpression: attributes?.join(","),
+		IndexName: indexName,
+		ExclusiveStartKey: exclusiveStartKey
+			? marshall({ id: exclusiveStartKey })
+			: undefined,
 	});
 
 	const { Items: items, LastEvaluatedKey: lastEvaluatedKey } =

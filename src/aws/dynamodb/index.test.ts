@@ -71,7 +71,9 @@ describe("testing dynamodb lib", () => {
 				Items: [marshall(item)],
 			});
 
-			await expect(scan("test", "123")).resolves.toEqual({
+			await expect(
+				scan("test", { exclusiveStartKey: "123" })
+			).resolves.toEqual({
 				data: [item],
 				lastKey: undefined,
 			});
@@ -82,7 +84,9 @@ describe("testing dynamodb lib", () => {
 				Items: undefined,
 			});
 
-			await expect(scan("test", "123")).resolves.toEqual({
+			await expect(
+				scan("test", { exclusiveStartKey: "123" })
+			).resolves.toEqual({
 				data: [],
 				lastKey: undefined,
 			});
