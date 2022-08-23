@@ -8,6 +8,7 @@ import {
 	scan,
 	updateItem,
 	UpdateItemProps,
+	count,
 } from "./index";
 
 import { User, user } from "../../../mocks/index";
@@ -31,6 +32,20 @@ describe("testing dynamodb lib", () => {
 
 	beforeEach(() => {
 		(client.send as jest.Mock).mockReset();
+	});
+
+	describe("testing count query", () => {
+		it("should return an error", async () => {
+			(client.send as jest.Mock).mockRejectedValueOnce("some error");
+
+			await expect(count("test")).rejects.toEqual("some error");
+		});
+
+		it("should return the count for a given table", async () => {
+			(client.send as jest.Mock).mockResolvedValue({ Count: 10 });
+
+			await expect(count("test")).resolves.toEqual(10);
+		});
 	});
 
 	describe("testing scan query", () => {

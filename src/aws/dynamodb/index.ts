@@ -12,6 +12,17 @@ import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ReturnValue } from "@aws-sdk/client-dynamodb";
 
 //
+// get table count
+//
+
+export const count = async (tableName: string): Promise<number | undefined> =>
+	(
+		await client.send(
+			new ScanCommand({ TableName: tableName, Select: "COUNT" })
+		)
+	).Count;
+
+//
 // scan data by batches
 //
 
