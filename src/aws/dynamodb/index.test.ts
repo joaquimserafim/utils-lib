@@ -56,26 +56,30 @@ describe("testing dynamodb lib", () => {
 		});
 
 		it("should return a list of items", async () => {
+			const data = marshall(item);
+
 			(client.send as jest.Mock).mockResolvedValue({
-				Items: [marshall(item)],
+				Items: [data],
 			});
 
 			await expect(scan("test")).resolves.toEqual({
-				data: [item],
-				lastKey: {},
+				items: [data],
+				lastEvaluatedKey: undefined,
 			});
 		});
 
 		it("should return a list of items passing the key", async () => {
+			const data = marshall(item);
+
 			(client.send as jest.Mock).mockResolvedValue({
-				Items: [marshall(item)],
+				Items: [data],
 			});
 
 			await expect(
 				scan("test", { exclusiveStartKey: "123" })
 			).resolves.toEqual({
-				data: [item],
-				lastKey: {},
+				items: [data],
+				lastEvaluatedKey: undefined,
 			});
 		});
 
@@ -87,8 +91,8 @@ describe("testing dynamodb lib", () => {
 			await expect(
 				scan("test", { exclusiveStartKey: "123" })
 			).resolves.toEqual({
-				data: [],
-				lastKey: {},
+				items: undefined,
+				lastEvaluatedKey: undefined,
 			});
 		});
 	});

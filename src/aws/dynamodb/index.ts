@@ -8,26 +8,10 @@ import {
 	UpdateCommandInput,
 	ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
-import {
-	marshall,
-	NativeAttributeBinary,
-	unmarshall,
-} from "@aws-sdk/util-dynamodb";
-import { AttributeValue, ReturnValue } from "@aws-sdk/client-dynamodb";
+import { marshall, NativeAttributeBinary } from "@aws-sdk/util-dynamodb";
+import { ReturnValue } from "@aws-sdk/client-dynamodb";
 
-//
-//
-//
-
-const prcUnmarshall = (
-	value: Record<string, AttributeValue>
-): Record<string, NativeAttributeBinary> => {
-	try {
-		return unmarshall(value);
-	} catch {
-		return value;
-	}
-};
+export { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
 //
 // get table count
@@ -45,8 +29,8 @@ export const count = async (tableName: string): Promise<number | undefined> =>
 //
 
 interface ScanOutput<T> {
-	readonly data: T[];
-	readonly lastKey?: Record<string, NativeAttributeBinary>;
+	readonly items?: T[];
+	readonly lastEvaluatedKey?: Record<string, NativeAttributeBinary>;
 }
 
 interface ScanParams {
@@ -89,12 +73,7 @@ export const scan = async <T = unknown>(
 	const { Items: items, LastEvaluatedKey: lastEvaluatedKey } =
 		await client.send(command);
 
-	process.stdout.write(JSON.stringify({ lastEvaluatedKey, items }));
-
-	const data = (items || []).map((item) => unmarshall(item) as T);
-	const lastKey = prcUnmarshall(lastEvaluatedKey || {});
-
-	return { data, lastKey };
+	return { items: items as T[] | undefined, lastEvaluatedKey };
 };
 
 //
