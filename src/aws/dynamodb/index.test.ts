@@ -76,7 +76,7 @@ describe("testing dynamodb lib", () => {
 			});
 
 			await expect(
-				scan("test", { exclusiveStartKey: "123" })
+				scan("test", { exclusiveStartKey: { id: "123" } })
 			).resolves.toEqual({
 				items: [data],
 				lastEvaluatedKey: undefined,
@@ -89,7 +89,7 @@ describe("testing dynamodb lib", () => {
 			});
 
 			await expect(
-				scan("test", { exclusiveStartKey: "123" })
+				scan("test", { exclusiveStartKey: { id: "123" } })
 			).resolves.toEqual({
 				items: undefined,
 				lastEvaluatedKey: undefined,

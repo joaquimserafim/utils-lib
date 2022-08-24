@@ -8,7 +8,7 @@ import {
 	UpdateCommandInput,
 	ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
-import { marshall, NativeAttributeBinary } from "@aws-sdk/util-dynamodb";
+import { NativeAttributeBinary } from "@aws-sdk/util-dynamodb";
 import { ReturnValue } from "@aws-sdk/client-dynamodb";
 
 export { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
@@ -34,7 +34,7 @@ interface ScanOutput<T> {
 }
 
 interface ScanParams {
-	readonly exclusiveStartKey?: string;
+	readonly exclusiveStartKey?: Record<string, unknown>;
 	readonly limit?: number;
 	readonly expressionAttributeNames?: Record<string, string>;
 	readonly expressionAttributeValues?: Record<string, unknown>;
@@ -65,9 +65,7 @@ export const scan = async <T = unknown>(
 		FilterExpression: filterExpression,
 		ProjectionExpression: attributes?.join(","),
 		IndexName: indexName,
-		ExclusiveStartKey: exclusiveStartKey
-			? marshall({ id: exclusiveStartKey })
-			: undefined,
+		ExclusiveStartKey: exclusiveStartKey,
 	});
 
 	const { Items: items, LastEvaluatedKey: lastEvaluatedKey } =
