@@ -57,6 +57,10 @@ export const scan = async <T = unknown>(
 		attributes,
 	} = params || {};
 
+	const useStartKey = exclusiveStartKey
+		? { ExclusiveStartKey: exclusiveStartKey }
+		: {};
+
 	const command = new ScanCommand({
 		TableName: tableName,
 		Limit: limit || 25,
@@ -65,9 +69,7 @@ export const scan = async <T = unknown>(
 		FilterExpression: filterExpression,
 		ProjectionExpression: attributes?.join(","),
 		IndexName: indexName,
-		ExclusiveStartKey: exclusiveStartKey
-			? { ...exclusiveStartKey }
-			: undefined,
+		...useStartKey,
 	});
 
 	const { Items: items, LastEvaluatedKey: lastEvaluatedKey } =
