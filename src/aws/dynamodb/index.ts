@@ -59,7 +59,7 @@ export const scan = async <T = unknown>(
 
 	const useStartKey = exclusiveStartKey
 		? { ExclusiveStartKey: exclusiveStartKey }
-		: {};
+		: undefined;
 
 	const command = new ScanCommand({
 		TableName: tableName,
