@@ -65,7 +65,9 @@ export const scan = async <T = unknown>(
 		FilterExpression: filterExpression,
 		ProjectionExpression: attributes?.join(","),
 		IndexName: indexName,
-		ExclusiveStartKey: exclusiveStartKey,
+		ExclusiveStartKey: exclusiveStartKey
+			? { ...exclusiveStartKey }
+			: undefined,
 	});
 
 	const { Items: items, LastEvaluatedKey: lastEvaluatedKey } =
