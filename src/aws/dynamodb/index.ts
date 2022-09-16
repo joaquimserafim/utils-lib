@@ -7,6 +7,7 @@ import {
 	UpdateCommand,
 	UpdateCommandInput,
 	ScanCommand,
+	PutCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { NativeAttributeBinary } from "@aws-sdk/util-dynamodb";
 import { ReturnValue } from "@aws-sdk/client-dynamodb";
@@ -167,7 +168,7 @@ export const updateItem = async <T = unknown>(
 		conditionExpression,
 		returnValues,
 	}: UpdateItemProps
-): Promise<T | 0> => {
+): Promise<T | undefined> => {
 	const params: UpdateCommandInput = {
 		TableName: tableName,
 		Key: { id },
@@ -180,5 +181,20 @@ export const updateItem = async <T = unknown>(
 
 	const { Attributes } = await client.send(new UpdateCommand(params));
 
-	return returnValues?.length ? <T>Attributes : 0;
+	return returnValues?.length ? <T>Attributes : undefined;
 };
+
+//
+//
+//
+
+export const put = async <T extends Record<string, unknown> | undefined>(
+	tableName: string,
+	item: T
+): Promise<boolean> =>
+	!!(await client.send(
+		new PutCommand({
+			TableName: tableName,
+			Item: item,
+		})
+	));

@@ -9,6 +9,7 @@ import {
 	updateItem,
 	UpdateItemProps,
 	count,
+	put,
 } from "./index";
 
 import { User, user } from "../../../mocks/index";
@@ -165,7 +166,7 @@ describe("testing dynamodb lib", () => {
 			});
 
 			await expect(updateItem("table", "123", filter)).resolves.toEqual(
-				0
+				undefined
 			);
 		});
 
@@ -221,6 +222,29 @@ describe("testing dynamodb lib", () => {
 			});
 
 			await expect(query<User[]>("table", params)).resolves.toEqual([]);
+		});
+	});
+
+	describe("testing put query", () => {
+		it("should return an error", async () => {
+			expect.hasAssertions();
+			(client.send as jest.Mock).mockRejectedValueOnce("some error");
+
+			await expect(put("table", { foo: "bar" })).rejects.toBe(
+				"some error"
+			);
+		});
+
+		it("should put an item if no item exists with that key or update of exists", async () => {
+			expect.hasAssertions();
+
+			(client.send as jest.Mock).mockResolvedValue({
+				Attributes: undefined,
+			});
+
+			await expect(
+				put("table", { id: 123, key1: "foo", key2: "bar" })
+			).resolves.toEqual(true);
 		});
 	});
 });
