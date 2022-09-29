@@ -1,23 +1,17 @@
 {
+	"extends": "@kamoa/tsconfig",
 	"compilerOptions": {
 		"outDir": "build",
-		"target": "ES2018",
-		"module": "CommonJS",
+		"target": "es2020",
 		"lib": ["es2020"],
-		"declaration": false,
-		"strict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noImplicitReturns": true,
-		"noFallthroughCasesInSwitch": true,
-		"inlineSourceMap": true,
-		"inlineSources": true,
-		"experimentalDecorators": true,
-		"strictPropertyInitialization": true,
-		"typeRoots": ["./node_modules/@types"],
-		"esModuleInterop": true,
-		"resolveJsonModule": true
+		"noPropertyAccessFromIndexSignature": false,
+		"isolatedModules": true
 	},
-	"exclude": ["coverage/", "build/"],
-	"include": ["src/**/*", "jest.setup.ts", "jest.config.ts"]
+	"include": ["src"],
+	"exclude": ["**/*.test.ts", "coverage/"],
+	"ts-node": {
+		"transpileOnly": true,
+		"files": true,
+		"experimentalResolver": true
+	}
 }

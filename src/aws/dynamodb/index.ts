@@ -1,4 +1,4 @@
-import { client } from "./client";
+import { client } from "./client.js";
 import {
 	GetCommand,
 	GetCommandInput,
@@ -11,7 +11,6 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { NativeAttributeBinary } from "@aws-sdk/util-dynamodb";
 import { ReturnValue } from "@aws-sdk/client-dynamodb";
-
 export { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
 //

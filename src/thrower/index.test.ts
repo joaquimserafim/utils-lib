@@ -1,4 +1,4 @@
-import { thrower } from "./index";
+import { thrower } from "./index.js";
 
 describe("Testing thrower", () => {
 	test("should be a function", () => {

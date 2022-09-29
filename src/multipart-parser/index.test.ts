@@ -1,6 +1,6 @@
 import { APIGatewayProxyEventV2 } from "aws-lambda";
 
-import { camelCase, decode, parser, unescape } from "./index";
+import { camelCase, decode, parser, unescape } from "./index.js";
 
 //
 //

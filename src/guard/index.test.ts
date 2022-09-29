@@ -1,4 +1,4 @@
-import { guard } from "./index";
+import { guard } from "./index.js";
 
 //
 //

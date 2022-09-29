@@ -1,4 +1,4 @@
-import { callback } from "./index";
+import { callback } from "./index.js";
 
 //
 //

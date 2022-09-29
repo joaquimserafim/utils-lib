@@ -1,2 +1,2 @@
-export * as apigateway from "./api-gateway";
-export { user, User } from "./user";
+export * as apigateway from "./api-gateway.js";
+export * as user from "./user.js";

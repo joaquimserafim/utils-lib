@@ -1,7 +1,7 @@
 import { APIGatewayProxyEventV2WithJWTAuthorizer } from "aws-lambda";
 
-import { apigateway } from "../../mocks/index";
-import { getJwtClaims } from "./misc";
+import { apigateway } from "../../mocks/index.js";
+import { getJwtClaims } from "./misc.js";
 
 //
 //

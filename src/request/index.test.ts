@@ -1,114 +1,111 @@
+import test from "ava";
 import nock from "nock";
 
-import { HttpMethod, request } from "./index";
-
-import { log } from "../log/index";
+import { request } from "./index.js";
 
 //
 //
 //
 
-describe("testing request lib", () => {
+(() => {
 	let scope: nock.Scope;
 	const url = "https://dot.com";
 
-	beforeAll(() => {
+	const client = request();
+
+	test.before(() => {
 		nock.disableNetConnect();
 	});
 
-	afterAll(() => {
+	test.after(() => {
 		nock.enableNetConnect();
 	});
 
-	afterEach(() => {
+	test.afterEach((t) => {
 		if (scope) {
-			expect(scope.isDone()).toBeTruthy();
+			t.truthy(scope.isDone());
 		}
 	});
 
-	it("should return a valid GET request", async () => {
-		expect.hasAssertions();
+	test("should return a valid GET request", async (t) => {
 		scope = nock(url).get("/").reply(200, { foo: "bar" });
 
-		await expect(request<Record<"foo", string>>(url)).resolves.toEqual({
-			foo: "bar",
-		});
+		const body = await client(url).json();
+
+		t.deepEqual(body, { foo: "bar" });
 	});
 
-	it("should return a valid POST request with a payload", async () => {
-		expect.hasAssertions();
-
+	test("should return a valid POST request with a payload", async (t) => {
 		const payload = { foo: "bar" };
 
 		scope = nock(url).post("/post", payload).reply(201);
 
-		await expect(
-			request<undefined, Record<"foo", string>>(url, {
-				method: HttpMethod.POST,
-				path: "/post",
-				body: payload,
-			})
-		).resolves.toEqual(undefined);
+		const response = await client.post(`${url}/post`, { json: payload });
+
+		t.is(response?.statusCode, 201);
 	});
 
-	it("should return a valid GET request with an empty body", async () => {
-		expect.hasAssertions();
+	test("should return a valid GET request with an empty body", async (t) => {
 		scope = nock(url).get("/").reply(200);
 
-		await expect(request(url)).resolves.toEqual(undefined);
+		const response = await client(url);
+
+		t.is(response?.body, "");
+		t.is(response?.statusCode, 200);
 	});
 
-	it("should throw a 400 when the downstream server responds with a 400", async () => {
-		expect.hasAssertions();
+	test("should throw a 400 when the downstream server responds wtesth a 400", async (t) => {
 		scope = nock(url).get("/").reply(400);
 
-		await expect(request(url)).rejects.toThrowError("400");
+		const error = await t.throwsAsync(client(url));
+
+		t.truthy(error);
+		t.is(error?.message, "Response code 400 (Bad Request)");
 	});
 
-	it("should throw a 404 when the downstream server responds with a 404", async () => {
-		expect.hasAssertions();
+	test("should throw a 404 when the downstream server responds wtesth a 404", async (t) => {
 		scope = nock(url).get("/").reply(404);
 
-		await expect(request(url)).rejects.toThrowError("404");
+		const error = await t.throwsAsync(client(url));
+
+		t.truthy(error);
+		t.is(error?.message, "Response code 404 (Not Found)");
 	});
 
-	it("should throw a 502 when the downstream server responds with a 500", async () => {
-		expect.hasAssertions();
+	test("should throw a 502 when the downstream server responds wtesth a 500", async (t) => {
 		scope = nock(url).get("/").reply(500);
 
-		await expect(request(url)).rejects.toThrowError("502");
+		const error = await t.throwsAsync(client(url));
+
+		t.truthy(error);
+		t.is(error?.message, "Response code 500 (Internal Server Error)");
 	});
 
-	it("should throw an error when the socket timeout", async () => {
-		expect.hasAssertions();
+	test("should throw an error when the socket timeout", async (t) => {
 		scope = nock(url).get("/").delayConnection(200).reply(200);
 
-		await expect(request(url, { timeout: 10 })).rejects.toThrow(
-			"The user aborted a request."
+		const error = await t.throwsAsync(
+			client(url, { timeout: { request: 10 } })
 		);
+
+		t.truthy(error);
+		t.is(error?.message, "Timeout awaiting 'request' for 10ms");
 	});
 
-	it("should throw an error when can't reach the downstream server", async () => {
-		expect.hasAssertions();
-
-		await expect(request(url)).rejects.toThrow();
-	});
-
-	it("should accept a `log` object to print logs to the stdout", async () => {
-		expect.hasAssertions();
-		scope = nock(url).get("/").reply(200);
-
-		const slogger = log("testing")({ id: "request" });
-
-		await expect(request(url, { slogger })).resolves.toEqual(undefined);
-	});
-
-	it("should return a payload with string when the content-type is text/plain", async () => {
-		expect.hasAssertions();
+	test("should return a payload with a string when the content-type is text/plain", async (t) => {
 		scope = nock(url).get("/").reply(200, "123", {
 			"Content-Type": "text/plain",
 		});
 
-		await expect(request(url)).resolves.toEqual("123");
+		const body = await client(url).text();
+
+		t.is(body, "123");
 	});
-});
+
+	test("should throw an error when can't reach the downstream server", async (t) => {
+		const error = await t.throwsAsync(client(url));
+
+		t.truthy(error);
+		t.truthy(error?.message);
+	});
+})();

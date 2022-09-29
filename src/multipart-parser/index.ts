@@ -1,4 +1,4 @@
-import { strict as assert } from "assert";
+import { strict as assert } from "node:assert";
 
 //
 //
@@ -67,10 +67,10 @@ export const parser = (
 
 			assert(isTokenValid, "form data token does not match");
 
-			const header = splitPayload[3].split(",").map(camelCase);
+			const header = (splitPayload[3] || "").split(",").map(camelCase);
 			const data = splitPayload.slice(4, -1);
 
-			const dataFormated: ParserOutput[] = data.map((entry) => {
+			const dataFormated: ParserOutput[] = (data || []).map((entry) => {
 				const values = entry.split(",");
 				let i = 0;
 

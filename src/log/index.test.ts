@@ -1,4 +1,4 @@
-import { log } from "./index";
+import { log } from "./index.js";
 
 describe("Testing the `log` lib", () => {
 	const logger = log("testing");

@@ -1,5 +1,6 @@
 import { marshall } from "@aws-sdk/util-dynamodb";
-import { client } from "./client";
+
+import { client } from "./client.js";
 import {
 	getItem,
 	query,
@@ -10,9 +11,9 @@ import {
 	UpdateItemProps,
 	count,
 	put,
-} from "./index";
+} from "./index.js";
 
-import { User, user } from "../../../mocks/index";
+import { user } from "../../../mocks/index.js";
 
 //
 //
@@ -103,7 +104,7 @@ describe("testing dynamodb lib", () => {
 			expect.hasAssertions();
 			(client.send as jest.Mock).mockRejectedValueOnce("some error");
 
-			await expect(getItem<User>("table", "123")).rejects.toBe(
+			await expect(getItem<user.User>("table", "123")).rejects.toBe(
 				"some error"
 			);
 		});
@@ -115,14 +116,16 @@ describe("testing dynamodb lib", () => {
 				Item: user,
 			});
 
-			await expect(getItem<User>("table", "123")).resolves.toEqual(user);
+			await expect(getItem<user.User>("table", "123")).resolves.toEqual(
+				user
+			);
 		});
 
 		it("should find and return an item", async () => {
 			expect.hasAssertions();
 			(client.send as jest.Mock).mockResolvedValue({});
 
-			await expect(getItem<User>("table", "123")).resolves.toEqual(
+			await expect(getItem<user.User>("table", "123")).resolves.toEqual(
 				undefined
 			);
 		});
@@ -134,7 +137,7 @@ describe("testing dynamodb lib", () => {
 			});
 
 			await expect(
-				getItem<User>("table", "123", ["id"])
+				getItem<user.User>("table", "123", ["id"])
 			).resolves.toEqual({ id: "123" });
 		});
 	});
@@ -197,7 +200,7 @@ describe("testing dynamodb lib", () => {
 			expect.hasAssertions();
 			(client.send as jest.Mock).mockRejectedValueOnce("some error");
 
-			await expect(query<User>("table", params)).rejects.toBe(
+			await expect(query<user.User>("table", params)).rejects.toBe(
 				"some error"
 			);
 		});
@@ -209,7 +212,7 @@ describe("testing dynamodb lib", () => {
 				Items: [user],
 			});
 
-			await expect(query<User[]>("table", params)).resolves.toEqual([
+			await expect(query<user.User[]>("table", params)).resolves.toEqual([
 				user,
 			]);
 		});
@@ -221,7 +224,9 @@ describe("testing dynamodb lib", () => {
 				Items: undefined,
 			});
 
-			await expect(query<User[]>("table", params)).resolves.toEqual([]);
+			await expect(query<user.User[]>("table", params)).resolves.toEqual(
+				[]
+			);
 		});
 	});
 
