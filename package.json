@@ -1,6 +1,6 @@
 {
 	"name": "@joaquimserafim/utils-lib",
-	"version": "2.3.1",
+	"version": "2.3.2",
 	"main": "build/index.js",
 	"types": "build/index.d.ts",
 	"files": ["README.md", "build/**/*"],
@@ -73,6 +73,5 @@
 	},
 	"engines": {
 		"node": ">=16"
-	},
-	"type": "module"
+	}
 }
