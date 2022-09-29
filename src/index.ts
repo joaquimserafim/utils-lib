@@ -4,4 +4,4 @@ export * from "./guard/index";
 export * from "./log/index";
 export * from "./thrower/index";
 export * as aws from "./aws/index";
-export * as multipartParser from "./multipart-parser/index";
+export * from "./multipart-parser/index";
