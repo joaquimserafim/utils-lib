@@ -1,6 +1,6 @@
 import { APIGatewayProxyEventV2 } from "aws-lambda";
 
-import { camelCase, decode, parser, unescape } from "./index";
+import { camelCase, decode, multipartParser, unescape } from "./index";
 
 //
 //
@@ -49,7 +49,7 @@ const event: APIGatewayProxyEventV2 = {
 //
 //
 
-describe("testing multipart-parser functions", () => {
+describe("testing multipart-multipartParser functions", () => {
 	describe("unescape", () => {
 		test("should unescape a string", () => {
 			expect.hasAssertions();
@@ -87,43 +87,45 @@ describe("testing multipart-parser functions", () => {
 		});
 	});
 
-	describe("parser", () => {
+	describe("multipartParser", () => {
 		const { headers, body } = event;
 
 		const contentType = headers["content-type"];
 
 		test("should throw an error when content-type is with bad format - case 1", async () => {
 			expect.hasAssertions();
-			await expect(parser()).rejects.toEqual(
+			await expect(multipartParser()).rejects.toEqual(
 				"content-type with bad format"
 			);
 		});
 
 		test("should throw an error when content-type is with bad format - case 2", async () => {
 			expect.hasAssertions();
-			await expect(parser("multipart/form-data;")).rejects.toEqual(
-				"content-type with bad format"
-			);
-		});
-
-		test("should throw an error when content-type is with bad format - case 3", async () => {
-			expect.hasAssertions();
 			await expect(
-				parser("multipart/form-data; boundary=")
+				multipartParser("multipart/form-data;")
 			).rejects.toEqual("content-type with bad format");
 		});
 
 		test("should throw an error when content-type is with bad format - case 3", async () => {
 			expect.hasAssertions();
 			await expect(
-				parser("multipart/form-data; boundary=------------------------")
+				multipartParser("multipart/form-data; boundary=")
+			).rejects.toEqual("content-type with bad format");
+		});
+
+		test("should throw an error when content-type is with bad format - case 3", async () => {
+			expect.hasAssertions();
+			await expect(
+				multipartParser(
+					"multipart/form-data; boundary=------------------------"
+				)
 			).rejects.toEqual("content-type with bad format");
 		});
 
 		test("should throw an error when tokens does not match - case 1 bad content type", async () => {
 			expect.hasAssertions();
 			await expect(
-				parser(
+				multipartParser(
 					"multipart/form-data; boundary=------------------------e0f697e4611742e3",
 					body
 				)
@@ -132,14 +134,14 @@ describe("testing multipart-parser functions", () => {
 
 		test("should throw an error when tokens does not match - case 2 bad body", async () => {
 			expect.hasAssertions();
-			await expect(parser(contentType, "bad body")).rejects.toEqual(
-				"form data token does not match"
-			);
+			await expect(
+				multipartParser(contentType, "bad body")
+			).rejects.toEqual("form data token does not match");
 		});
 
 		test("should parse the form data", async () => {
 			expect.hasAssertions();
-			await expect(parser(contentType, body)).resolves.toEqual([
+			await expect(multipartParser(contentType, body)).resolves.toEqual([
 				{
 					accountNo: "1000198860",
 					amount: "-1300.26",

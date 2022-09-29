@@ -42,7 +42,7 @@ interface ParserOutput {
 	readonly [key: string]: string;
 }
 
-export const parser = (
+export const multipartParser = (
 	contentType?: string,
 	body?: string
 ): Promise<ParserOutput[]> =>
