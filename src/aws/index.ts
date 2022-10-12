@@ -9,3 +9,4 @@ declare global {
 
 export * as dynamodb from "./dynamodb/index";
 export * as misc from "./misc";
+export * as sqs from "./sqs/index";
