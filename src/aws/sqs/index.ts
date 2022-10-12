@@ -21,7 +21,8 @@ export const publish = (
 			},
 		},
 		QueueUrl: queueUrl,
-		DelaySeconds: delaySeconds || 1,
+
+		DelaySeconds: delaySeconds || 0,
 		MessageBody: "",
 	};
 
