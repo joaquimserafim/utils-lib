@@ -1,28 +1,35 @@
+import test from "ava";
+
 import { guard } from "./index.js";
 
 //
 //
 //
 
-describe("Testing guard", () => {
-	test("should be a function", () => {
-		expect(typeof guard).toBe("function");
-	});
+test("should be a function", (t) => {
+	t.is(typeof guard, "function");
+});
 
-	test("should test the given expression and return a value from the callback/return action", () => {
-		expect(guard(1 === 1, () => 1)).toBe(1);
-	});
+test("should test the given expression and return a value from the callback/return action", (t) => {
+	t.is(
+		guard(1 === 1, () => 1),
+		1
+	);
+});
 
-	test("should return false when the guard expression does not match", () => {
-		//@ts-expect-error expected error
-		expect(guard(1 === 2, () => 1)).toBe(false);
-	});
+test("should return false when the guard expression does not match", (t) => {
+	t.is(
+		guard(false, () => 1),
+		false
+	);
+});
 
-	test("should throw when the callback/return action throws", () => {
-		expect(() =>
+test("should throw when the callback/return action throws", (t) => {
+	t.throws(
+		() =>
 			guard(1 === 1, () => {
-				throw "error";
-			})
-		).toThrow();
-	});
+				throw new Error();
+			}),
+		{ instanceOf: Error }
+	);
 });

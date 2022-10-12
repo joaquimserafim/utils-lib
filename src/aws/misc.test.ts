@@ -1,3 +1,4 @@
+import test from "ava";
 import { APIGatewayProxyEventV2WithJWTAuthorizer } from "aws-lambda";
 
 import { apigateway } from "../../mocks/index.js";
@@ -34,18 +35,13 @@ const event: APIGatewayProxyEventV2WithJWTAuthorizer = {
 	},
 };
 
-describe("testing misc fns", () => {
-	describe("testing getJwtClaims", () => {
-		test("should return a valid `sub` property", () => {
-			expect.hasAssertions();
-			expect(getJwtClaims(event).sub).toBe("xpto123");
-		});
+test("should return a valid `sub` property", (t) => {
+	t.is(getJwtClaims(event).sub, "xpto123");
+});
 
-		test("should return a valid `sub` property", () => {
-			expect.hasAssertions();
-			expect(
-				getJwtClaims({} as APIGatewayProxyEventV2WithJWTAuthorizer)?.sub
-			).toBe(undefined);
-		});
-	});
+test("should return undefined when doesn not exists", (t) => {
+	t.is(
+		getJwtClaims({} as APIGatewayProxyEventV2WithJWTAuthorizer)?.sub,
+		undefined
+	);
 });
