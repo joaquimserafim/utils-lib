@@ -1,6 +1,8 @@
 import { client } from "./client";
 import { sendSMS } from "./index";
 
+import { sns } from "../../../mocks/index";
+
 //
 //
 //
@@ -26,9 +28,11 @@ describe("testing sns lib", () => {
 		});
 
 		it("should publish a message", async () => {
-			(client.send as jest.Mock).mockResolvedValue("");
+			(client.send as jest.Mock).mockResolvedValue(sns.response);
 
-			await expect(sendSMS("12345678", "foo bar")).resolves.toEqual("");
+			await expect(sendSMS("12345678", "foo bar")).resolves.toEqual(
+				sns.response
+			);
 		});
 	});
 });
