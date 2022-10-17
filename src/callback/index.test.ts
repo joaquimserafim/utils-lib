@@ -16,10 +16,18 @@ describe("testing the callback", () => {
 		});
 	});
 
-	test("should not use `JSON.stringify` when teh payload is a string already", () => {
+	test("should not use `JSON.stringify` when the payload is a string already", () => {
 		expect(callback(200, "123")).toEqual({
 			body: "123",
 			statusCode: 200,
+		});
+	});
+
+	test("should accept a headers argument", () => {
+		expect(callback(200, undefined, { x: "123" })).toEqual({
+			body: "",
+			statusCode: 200,
+			headers: { x: "123" },
 		});
 	});
 
