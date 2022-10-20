@@ -28,9 +28,15 @@ describe("testing sqs lib", () => {
 		await expect(pub(msg)).rejects.toEqual("some error");
 	});
 
-	it("should publish a message", async () => {
+	it("should publish a message and stringify when is an object", async () => {
 		(client.send as jest.Mock).mockResolvedValue(sqs.response);
 
 		await expect(pub(msg)).resolves.toEqual(sqs.response);
+	});
+
+	it("should publish a message when passing a string", async () => {
+		(client.send as jest.Mock).mockResolvedValue(sqs.response);
+
+		await expect(pub("test123")).resolves.toEqual(sqs.response);
 	});
 });

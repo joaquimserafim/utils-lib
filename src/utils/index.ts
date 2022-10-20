@@ -1,33 +1,32 @@
-// import * as R from "ramda";
+import * as R from "ramda";
 
 //
 //
 //
 
-export const camelCase = (word: string) =>
-	word
-		.toLowerCase()
-		.split(/\s|-|_/g)
-		.map((w, i) =>
-			i > 0
-				? w.charAt(0).toUpperCase() + w.slice(1)
-				: w.charAt(0).toLowerCase() + w.slice(1)
-		)
-		.join("");
+export const camelCase = (str: string) =>
+	str
+		.replace(/_|-/g, " ")
+		.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) =>
+			+match === 0
+				? ""
+				: index === 0
+				? match.toLowerCase()
+				: match.toUpperCase()
+		);
 
 //
-//
-//
-
-// const mapKeys = R.curry((fn, obj) =>
-//	R.fromPairs(R.map(R.adjust(0, fn), R.toPairs(obj)))
-// );
-
-//
-//
+// converts recursive the keys of a given object with nested objects
+// doesn't iteract over arrays
 //
 
-// export const eCamelCase = R.pipe(
-//	R.map(R.when(R.is(Object), (v) => eCamelCase(v))),
-//	mapKeys(camelCase)
-// );
+export const recCamelCase = <T = unknown>(o: Record<string, unknown>): T =>
+	Object.keys(o).reduce(
+		(acc, curr) => ({
+			...acc,
+			[camelCase(curr)]: R.is(Object, o[curr])
+				? recCamelCase(<Record<string, unknown>>o[curr])
+				: o[curr],
+		}),
+		<T>{}
+	);

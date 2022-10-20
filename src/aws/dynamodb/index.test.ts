@@ -69,6 +69,23 @@ describe("testing dynamodb lib", () => {
 			});
 		});
 
+		it("should return a list of items and return only the passed attributes", async () => {
+			const data = marshall(item);
+
+			const obj = [{ id: data.id }];
+
+			(client.send as jest.Mock).mockResolvedValue({
+				Items: obj,
+			});
+
+			await expect(scan("test", { attributes: ["id"] })).resolves.toEqual(
+				{
+					items: obj,
+					lastEvaluatedKey: undefined,
+				}
+			);
+		});
+
 		it("should return a list of items passing the key", async () => {
 			const data = marshall(item);
 
@@ -212,6 +229,18 @@ describe("testing dynamodb lib", () => {
 			await expect(query<User[]>("table", params)).resolves.toEqual([
 				user,
 			]);
+		});
+
+		it("should find and return some items with the attributes passed", async () => {
+			expect.hasAssertions();
+
+			(client.send as jest.Mock).mockResolvedValue({
+				Items: [{ id: user.id }],
+			});
+
+			await expect(
+				query<User[]>("table", { ...params, attributes: ["id"] })
+			).resolves.toEqual([{ id: user.id }]);
 		});
 
 		it("should return an empty [] when not find", async () => {
