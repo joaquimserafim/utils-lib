@@ -1,4 +1,5 @@
 import { strict as assert } from "assert";
+import { camelCase } from "../utils";
 
 //
 //
@@ -22,16 +23,6 @@ export const decode = (str: string, encoding?: Encondig) =>
 	Buffer.from(unescape(str), Encondig.base64).toString(
 		encoding ?? Encondig.utf8
 	);
-
-export const camelCase = (word: string) =>
-	word
-		.split(/\s/)
-		.map((w, i) =>
-			i > 0
-				? w.charAt(0).toUpperCase() + w.slice(1)
-				: w.charAt(0).toLowerCase() + w.slice(1)
-		)
-		.join("");
 
 //
 //

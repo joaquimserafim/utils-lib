@@ -1,6 +1,6 @@
 import { APIGatewayProxyEventV2 } from "aws-lambda";
 
-import { camelCase, decode, multipartParser, unescape } from "./index";
+import { decode, multipartParser, unescape } from "./index";
 
 //
 //
@@ -65,25 +65,6 @@ describe("testing multipart-multipartParser functions", () => {
 			expect(decode("Tm9kZS5qcyBpcyBhd2Vzb21lLg")).toBe(
 				"Node.js is awesome."
 			);
-		});
-	});
-
-	describe("camelCase", () => {
-		const words = ["foo bar", "bar   foo", "f two", "b four"];
-
-		test("should apply camel case multiple words", () => {
-			expect.hasAssertions();
-			expect(words.map(camelCase)).toEqual([
-				"fooBar",
-				"barFoo",
-				"fTwo",
-				"bFour",
-			]);
-		});
-
-		test("should not change a string when is just one word", () => {
-			expect.hasAssertions();
-			expect(camelCase("foobar")).toEqual("foobar");
 		});
 	});
 
