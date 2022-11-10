@@ -35,3 +35,19 @@ export const publish = (
 			})
 		);
 };
+
+//
+//
+//
+
+interface Event<T> {
+	readonly type: string;
+	readonly timestamp: number;
+	readonly event: T;
+}
+
+export const pubEvent = async <T>(
+	url: string,
+	awsOriginRequestId: string,
+	event: Event<T>
+) => await publish(url, awsOriginRequestId)({ ...event });
