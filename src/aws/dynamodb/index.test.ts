@@ -125,6 +125,15 @@ describe("testing dynamodb lib", () => {
 			);
 		});
 
+		it("should return undefined when Item is null", async () => {
+			expect.hasAssertions();
+			(client.send as jest.Mock).mockResolvedValue(null);
+
+			await expect(getItem<User>("table", "123")).resolves.toEqual(
+				undefined
+			);
+		});
+
 		it("should find and return an item", async () => {
 			expect.hasAssertions();
 

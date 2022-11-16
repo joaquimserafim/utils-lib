@@ -94,9 +94,9 @@ export const getItem = async <T = undefined>(
 		TableName: tableName,
 	};
 
-	const { Item } = await client.send(new GetCommand(params));
+	const record = await client.send(new GetCommand(params));
 
-	return Item as T;
+	return record?.Item as T;
 };
 
 //
