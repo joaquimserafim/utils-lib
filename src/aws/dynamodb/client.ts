@@ -10,10 +10,6 @@ declare global {
 	interface File {}
 }
 
-import { log } from "../../log/index";
-
-const logger = log("dynamodb/client")({});
-
 //
 //
 //
@@ -22,10 +18,5 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 export const client = new DynamoDBClient({
 	region: process.env.AWS_REGION,
-	logger: {
-		info: logger.info,
-		warn: logger.info,
-		debug: logger.info,
-		error: logger.error,
-	},
+	logger: undefined,
 });
