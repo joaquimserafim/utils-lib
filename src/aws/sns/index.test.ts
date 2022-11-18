@@ -1,5 +1,5 @@
 import { client } from "./client";
-import { sendSMS } from "./index";
+import { publishToTopic, sendSMS } from "./index";
 
 import { sns } from "../../../mocks/index";
 
@@ -18,7 +18,7 @@ describe("testing sns lib", () => {
 		(client.send as jest.Mock).mockReset();
 	});
 
-	describe("tsting sms", () => {
+	describe("testing sms", () => {
 		it("should return an error", async () => {
 			(client.send as jest.Mock).mockRejectedValueOnce("some error");
 
@@ -33,6 +33,32 @@ describe("testing sns lib", () => {
 			await expect(sendSMS("12345678", "foo bar")).resolves.toEqual(
 				sns.response
 			);
+		});
+	});
+
+	describe("testing publish to topic", () => {
+		it("should return an error", async () => {
+			(client.send as jest.Mock).mockRejectedValueOnce("some error");
+
+			await expect(publishToTopic("12345678", "foo bar")).rejects.toEqual(
+				"some error"
+			);
+		});
+
+		it("should publish a message - string", async () => {
+			(client.send as jest.Mock).mockResolvedValue(sns.response);
+
+			await expect(
+				publishToTopic("12345678", "foo bar")
+			).resolves.toEqual(sns.response);
+		});
+
+		it("should publish a message - js object", async () => {
+			(client.send as jest.Mock).mockResolvedValue(sns.response);
+
+			await expect(
+				publishToTopic("12345678", { foo: "bar" })
+			).resolves.toEqual(sns.response);
 		});
 	});
 });
