@@ -10,8 +10,6 @@ import {
 	PutCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { NativeAttributeBinary } from "@aws-sdk/util-dynamodb";
-import { ReturnValue } from "@aws-sdk/client-dynamodb";
-
 export { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
 //
@@ -155,7 +153,7 @@ export interface UpdateItemProps {
 	readonly updateExpression: string;
 	readonly expressionAttributeValues: Record<string, unknown>;
 	readonly conditionExpression?: string;
-	readonly returnValues?: ReturnValue;
+	readonly returnValues?: ReturnValueOptions;
 }
 
 export const updateItem = async <T = unknown>(
@@ -176,7 +174,7 @@ export const updateItem = async <T = unknown>(
 		UpdateExpression: updateExpression,
 		ExpressionAttributeValues: expressionAttributeValues,
 		ConditionExpression: conditionExpression,
-		ReturnValues: returnValues || "NONE",
+		ReturnValues: returnValues || ReturnValueOptions.None,
 	};
 
 	const { Attributes } = await client.send(new UpdateCommand(params));
