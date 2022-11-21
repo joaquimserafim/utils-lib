@@ -1,4 +1,9 @@
-import { camelCase, recCamelCase } from "./index";
+import {
+	camelCase,
+	camelToSnake,
+	recCamelCase,
+	recCamelCaseToSnakeCase,
+} from "./index";
 
 //
 //
@@ -47,6 +52,36 @@ describe("testing utils lib", () => {
 			).toEqual({
 				documentNo: "1213",
 				names: { firstName: "Roht", otherName: "Foo", surname: "Bar" },
+			});
+		});
+	});
+
+	describe("testing camelToSnake", () => {
+		test("should convert from camelCase to snakeCase - string", () => {
+			expect.hasAssertions();
+			expect(camelToSnake("helloWorld")).toBe("hello_world");
+		});
+
+		test("should convert from camelCase to snakeCase - string[]", () => {
+			expect.hasAssertions();
+			expect(["helloWorld"].map(camelToSnake)).toEqual(["hello_world"]);
+		});
+	});
+
+	describe("testing camelToSnake wiht js objects", () => {
+		test("should convert from camelCase to snakeCase - 1 level object", () => {
+			expect.hasAssertions();
+			expect(recCamelCaseToSnakeCase({ helloWorld: "123" })).toEqual({
+				hello_world: "123",
+			});
+		});
+
+		test("should convert from camelCase to snakeCase - 2 level object", () => {
+			expect.hasAssertions();
+			expect(
+				recCamelCaseToSnakeCase({ helloWorld: { isToday: "yes" } })
+			).toEqual({
+				hello_world: { is_today: "yes" },
 			});
 		});
 	});
