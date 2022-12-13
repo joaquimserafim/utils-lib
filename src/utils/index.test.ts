@@ -1,6 +1,10 @@
+import { setTimeout as delay } from "node:timers/promises";
+
 import {
+	betweenRange,
 	camelCase,
 	camelToSnake,
+	getTimeMs,
 	recCamelCase,
 	recCamelCaseToSnakeCase,
 } from "./index";
@@ -83,6 +87,29 @@ describe("testing utils lib", () => {
 			).toEqual({
 				hello_world: { is_today: "yes" },
 			});
+		});
+	});
+
+	describe("testing getTimeMs", () => {
+		test("should compute a given time in ms", async () => {
+			const startTime = process.hrtime();
+
+			await delay(500);
+
+			expect.hasAssertions();
+			expect(getTimeMs(process.hrtime(startTime))).toBeGreaterThan(500);
+		});
+	});
+
+	describe("testing betweenRange", () => {
+		test("should match a given number between 2 numbers", () => {
+			expect.hasAssertions();
+			expect(betweenRange(2, 1, 3)).toBe(true);
+		});
+
+		test("should not match a given number between 2 numbers", () => {
+			expect.hasAssertions();
+			expect(betweenRange(2, 3, 3)).toBe(false);
 		});
 	});
 });

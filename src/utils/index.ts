@@ -53,3 +53,17 @@ export const recCamelCaseToSnakeCase = <T = unknown>(
 		}),
 		<T>{}
 	);
+
+//
+//
+//
+
+export const getTimeMs = (endTime: number[]): number =>
+	+Number(endTime[0] * 1e3 + endTime[1] * 1e-6).toFixed(1);
+
+//
+//
+//
+
+export const betweenRange = (value: number, n1: number, n2: number) =>
+	n1 <= value && n2 >= value;

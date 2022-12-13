@@ -107,6 +107,7 @@ export interface QueryProps {
 	readonly expressionAttributeValues: Record<string, unknown>;
 	readonly filterExpression?: string;
 	readonly attributes?: string[];
+	readonly limit?: number;
 	readonly indexName?: string;
 }
 
@@ -118,6 +119,7 @@ export const query = async <T = undefined>(
 		expressionAttributeValues,
 		filterExpression,
 		attributes,
+		limit,
 		indexName,
 	}: QueryProps
 ): Promise<T[]> => {
@@ -129,6 +131,7 @@ export const query = async <T = undefined>(
 		FilterExpression: filterExpression,
 		ProjectionExpression: attributes?.join(","),
 		IndexName: indexName,
+		Limit: limit,
 	};
 
 	const { Items } = await client.send(new QueryCommand(params));

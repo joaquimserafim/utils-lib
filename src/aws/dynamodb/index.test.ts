@@ -1,4 +1,3 @@
-import { marshall } from "@aws-sdk/util-dynamodb";
 import { client } from "./client";
 import {
 	getItem,
@@ -10,6 +9,8 @@ import {
 	UpdateItemProps,
 	count,
 	put,
+	marshall,
+	unmarshall,
 } from "./index";
 
 import { User, user } from "../../../mocks/index";
@@ -283,6 +284,20 @@ describe("testing dynamodb lib", () => {
 			await expect(
 				put("table", { id: 123, key1: "foo", key2: "bar" })
 			).resolves.toEqual(true);
+		});
+	});
+
+	describe("testing marshall and unmarshall", () => {
+		it("marshall", () => {
+			expect.hasAssertions();
+			expect(marshall({ foo: 123 })).toEqual({ foo: { N: "123" } });
+		});
+
+		it("unmarshall", () => {
+			expect.hasAssertions();
+			expect(unmarshall({ foo: { N: "123" } })).toEqual({
+				foo: 123,
+			});
 		});
 	});
 });
