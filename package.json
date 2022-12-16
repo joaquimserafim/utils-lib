@@ -1,6 +1,6 @@
 {
 	"name": "@joaquimserafim/utils-lib",
-	"version": "2.16.0",
+	"version": "2.17.0",
 	"main": "build/index.js",
 	"types": "build/index.d.ts",
 	"files": ["README.md", "build/**/*"],

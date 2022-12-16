@@ -1,5 +1,6 @@
 import { client } from "./client";
 import {
+	ReceiveMessageCommand,
 	SendMessageCommand,
 	SendMessageCommandInput,
 } from "@aws-sdk/client-sqs";
@@ -51,3 +52,27 @@ export const pubEvent = async <T>(
 	awsOriginRequestId: string,
 	event: Event<T>
 ) => await publish(url, awsOriginRequestId)({ ...event });
+
+//
+//
+//
+
+export interface SubscriberParams {
+	readonly attributeNames?: Array<string>;
+	readonly maxNumberOfMessages?: number;
+	readonly messageAttributeNames?: Array<string>;
+	readonly visibilityTimeout?: number;
+	readonly waitTimeSeconds?: number;
+}
+
+export const subEvent = async (url: string, params?: SubscriberParams) =>
+	await client.send(
+		new ReceiveMessageCommand({
+			QueueUrl: url,
+			AttributeNames: params?.attributeNames || ["ALL"],
+			MaxNumberOfMessages: params?.maxNumberOfMessages || 10,
+			MessageAttributeNames: params?.messageAttributeNames || ["ALL"],
+			VisibilityTimeout: params?.visibilityTimeout || 20,
+			WaitTimeSeconds: params?.waitTimeSeconds || 0,
+		})
+	);
