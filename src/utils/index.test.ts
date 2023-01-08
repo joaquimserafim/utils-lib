@@ -14,7 +14,7 @@ import {
 //
 
 describe("testing utils lib", () => {
-	describe("testing camelCase", () => {
+	describe("camelCase", () => {
 		test("checking if when imported returns a function", () => {
 			expect.hasAssertions();
 			expect(typeof camelCase).toBe("function");
@@ -41,8 +41,8 @@ describe("testing utils lib", () => {
 		});
 	});
 
-	describe("testing recCamelCase", () => {
-		test("should covert to camel case a nested object", () => {
+	describe("recCamelCase", () => {
+		test("should convert to camel case a nested object", () => {
 			expect.hasAssertions();
 			expect(
 				recCamelCase({
@@ -58,9 +58,13 @@ describe("testing utils lib", () => {
 				names: { firstName: "Roht", otherName: "Foo", surname: "Bar" },
 			});
 		});
+
+		test("should convert and not change the data type - empty array scenario", () => {
+			expect(recCamelCase({ foo_bar: [] })).toEqual({ fooBar: [] });
+		});
 	});
 
-	describe("testing camelToSnake", () => {
+	describe("camelToSnake", () => {
 		test("should convert from camelCase to snakeCase - string", () => {
 			expect.hasAssertions();
 			expect(camelToSnake("helloWorld")).toBe("hello_world");
@@ -72,7 +76,7 @@ describe("testing utils lib", () => {
 		});
 	});
 
-	describe("testing camelToSnake wiht js objects", () => {
+	describe("camelToSnake wiht js objects", () => {
 		test("should convert from camelCase to snakeCase - 1 level object", () => {
 			expect.hasAssertions();
 			expect(recCamelCaseToSnakeCase({ helloWorld: "123" })).toEqual({
@@ -90,7 +94,7 @@ describe("testing utils lib", () => {
 		});
 	});
 
-	describe("testing getTimeMs", () => {
+	describe("getTimeMs", () => {
 		test("should compute a given time in ms", async () => {
 			const startTime = process.hrtime();
 
@@ -101,7 +105,7 @@ describe("testing utils lib", () => {
 		});
 	});
 
-	describe("testing betweenRange", () => {
+	describe("betweenRange", () => {
 		test("should match a given number between 2 numbers", () => {
 			expect.hasAssertions();
 			expect(betweenRange(2, 1, 3)).toBe(true);

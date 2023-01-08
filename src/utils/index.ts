@@ -24,7 +24,9 @@ export const recCamelCase = <T = unknown>(o: Record<string, unknown>): T =>
 	Object.keys(o).reduce(
 		(acc, curr) => ({
 			...acc,
-			[camelCase(curr)]: R.is(Object, o[curr])
+			[camelCase(curr)]: Array.isArray(o[curr])
+				? (o[curr] as Array<Record<string, unknown>>).map(recCamelCase)
+				: R.is(Object, o[curr])
 				? recCamelCase(<Record<string, unknown>>o[curr])
 				: o[curr],
 		}),
