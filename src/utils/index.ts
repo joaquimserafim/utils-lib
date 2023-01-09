@@ -69,3 +69,18 @@ export const getTimeMs = (endTime: number[]): number =>
 
 export const betweenRange = (value: number, n1: number, n2: number) =>
 	n1 <= value && n2 >= value;
+
+//
+//
+//
+
+export const hash = (str: string) => {
+	let hash = 5381;
+	let index = str.length;
+
+	while (index) {
+		hash = (hash * 33) ^ str.charCodeAt(--index);
+	}
+
+	return hash >>> 0;
+};

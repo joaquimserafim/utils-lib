@@ -5,6 +5,7 @@ import {
 	camelCase,
 	camelToSnake,
 	getTimeMs,
+	hash,
 	recCamelCase,
 	recCamelCaseToSnakeCase,
 } from "./index";
@@ -114,6 +115,13 @@ describe("testing utils lib", () => {
 		test("should not match a given number between 2 numbers", () => {
 			expect.hasAssertions();
 			expect(betweenRange(2, 3, 3)).toBe(false);
+		});
+	});
+
+	describe("hash", () => {
+		test("should return the hash for a given string", () => {
+			expect.hasAssertions();
+			expect(hash("hello world")).toBeGreaterThan(0);
 		});
 	});
 });
