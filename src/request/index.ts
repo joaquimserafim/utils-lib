@@ -40,7 +40,7 @@ export const request = async <T = unknown, R = unknown>(
 	try {
 		const response = await fetch(`${url}${path ?? ""}`, {
 			method,
-			body: body && JSON.stringify(body),
+			body: typeof body === "string" ? body : JSON.stringify(body),
 			headers: {
 				"Content-Type": "application/json",
 				...headers,

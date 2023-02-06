@@ -26,7 +26,7 @@ describe("testing request lib", () => {
 		}
 	});
 
-	it("should return a valid GET request", async () => {
+	it("should return successful for a valid GET request", async () => {
 		expect.hasAssertions();
 		scope = nock(url).get("/").reply(200, { foo: "bar" });
 
@@ -35,7 +35,7 @@ describe("testing request lib", () => {
 		});
 	});
 
-	it("should return a valid POST request with a payload", async () => {
+	it("should return successful for a valid POST request with a payload", async () => {
 		expect.hasAssertions();
 
 		const payload = { foo: "bar" };
@@ -51,7 +51,21 @@ describe("testing request lib", () => {
 		).resolves.toEqual(undefined);
 	});
 
-	it("should return a valid GET request with an empty body", async () => {
+	it("should return successful for a POST posting a string", async () => {
+		expect.hasAssertions();
+
+		scope = nock(url).post("/post", "hello world").reply(201);
+
+		await expect(
+			request<undefined, string>(url, {
+				method: HttpMethod.POST,
+				path: "/post",
+				body: "hello world",
+			})
+		).resolves.toEqual(undefined);
+	});
+
+	it("should return successful for a valid GET request with an empty body", async () => {
 		expect.hasAssertions();
 		scope = nock(url).get("/").reply(200);
 
