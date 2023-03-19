@@ -157,6 +157,7 @@ export interface UpdateItemProps {
 	readonly expressionAttributeValues: Record<string, unknown>;
 	readonly conditionExpression?: string;
 	readonly returnValues?: ReturnValueOptions;
+	readonly sortKey?: Record<string, string | number>;
 }
 
 export const updateItem = async <T = unknown>(
@@ -168,11 +169,12 @@ export const updateItem = async <T = unknown>(
 		expressionAttributeValues,
 		conditionExpression,
 		returnValues,
+		sortKey,
 	}: UpdateItemProps
 ): Promise<T | undefined> => {
 	const params: UpdateCommandInput = {
 		TableName: tableName,
-		Key: { id },
+		Key: { id, ...sortKey },
 		ExpressionAttributeNames: expressionAttributeNames,
 		UpdateExpression: updateExpression,
 		ExpressionAttributeValues: expressionAttributeValues,

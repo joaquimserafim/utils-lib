@@ -186,7 +186,7 @@ describe("testing dynamodb lib", () => {
 			);
 		});
 
-		it("should updateItem an item and returns the default value", async () => {
+		it("should updateItem an item and returns the default value - undefined", async () => {
 			expect.hasAssertions();
 			(client.send as jest.Mock).mockResolvedValue({
 				Attributes: {},
@@ -195,6 +195,20 @@ describe("testing dynamodb lib", () => {
 			await expect(updateItem("table", "123", filter)).resolves.toEqual(
 				undefined
 			);
+		});
+
+		it("should updateItem an item with partition key and sort key", async () => {
+			expect.hasAssertions();
+			(client.send as jest.Mock).mockResolvedValue({
+				Attributes: {},
+			});
+
+			await expect(
+				updateItem("table", "123", {
+					...filter,
+					sortKey: { timestamp: Date.now() },
+				})
+			).resolves.toEqual(undefined);
 		});
 
 		it("should updateItem an item and returns the new values", async () => {
