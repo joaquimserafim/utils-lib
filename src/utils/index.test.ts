@@ -6,6 +6,7 @@ import {
 	camelToSnake,
 	getTimeMs,
 	hash,
+	levenshteinDistance,
 	recCamelCase,
 	recCamelCaseToSnakeCase,
 } from "./index";
@@ -122,6 +123,13 @@ describe("testing utils lib", () => {
 		test("should return the hash for a given string", () => {
 			expect.hasAssertions();
 			expect(hash("hello world")).toBeGreaterThan(0);
+		});
+	});
+
+	describe("levenshteinDistance", () => {
+		test("shoudl return 1 as the distance between the 2 strings", () => {
+			expect.hasAssertions();
+			expect(levenshteinDistance("ABc", "ABC")).toBe(1);
 		});
 	});
 });
