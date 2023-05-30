@@ -16,7 +16,8 @@
 		"strictPropertyInitialization": true,
 		"typeRoots": ["./node_modules/@types"],
 		"esModuleInterop": true,
-		"resolveJsonModule": true
+		"resolveJsonModule": true,
+		"removeComments": true
 	},
 	"exclude": ["coverage/", "build/"],
 	"include": ["src/**/*", "jest.setup.ts", "jest.config.ts"]

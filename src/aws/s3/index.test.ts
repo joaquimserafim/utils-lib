@@ -1,6 +1,6 @@
 import { client } from "./client";
 
-import { save } from "./index";
+import { get, put } from "./index";
 
 //
 //
@@ -17,19 +17,35 @@ describe("testing s3 lib", () => {
 		(client.send as jest.Mock).mockReset();
 	});
 
-	describe("testing sms", () => {
+	describe("put", () => {
 		it("should return an error", async () => {
 			(client.send as jest.Mock).mockRejectedValueOnce("some error");
 
-			await expect(save("foo", "bar", "123")).rejects.toEqual(
+			await expect(put("foo", "bar", "123")).rejects.toEqual(
 				"some error"
 			);
 		});
 
-		it("should save an object", async () => {
+		it("should put an object", async () => {
 			(client.send as jest.Mock).mockResolvedValue("ok");
 
-			await expect(save("foo", "bar", "123")).resolves.toEqual("ok");
+			await expect(put("foo", "bar", "123")).resolves.toEqual("ok");
+		});
+	});
+
+	describe("get", () => {
+		it("should return an error", async () => {
+			(client.send as jest.Mock).mockRejectedValueOnce("some error");
+
+			await expect(get("foo", "bar")).rejects.toEqual("some error");
+		});
+
+		it("should get an object", async () => {
+			(client.send as jest.Mock).mockResolvedValue({
+				Body: { transformToString: async () => "123" },
+			});
+
+			await expect(get("foo", "bar")).resolves.toEqual("123");
 		});
 	});
 });
