@@ -94,6 +94,15 @@ describe("testing utils lib", () => {
 				hello_world: { is_today: "yes" },
 			});
 		});
+
+		test("should convert from camelCase to snakeCase - with arrays", () => {
+			expect.hasAssertions();
+			expect(
+				recCamelCaseToSnakeCase({ helloWorld: { isToday: ["yes"] } })
+			).toEqual({
+				hello_world: { is_today: ["yes"] },
+			});
+		});
 	});
 
 	describe("getTimeMs", () => {

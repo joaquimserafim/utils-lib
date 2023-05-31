@@ -44,17 +44,21 @@ export const camelToSnake = (word: string) =>
 //
 
 export const recCamelCaseToSnakeCase = <T = unknown>(
-	o: Record<string, unknown>
-): T =>
-	Object.keys(o).reduce(
-		(acc, curr) => ({
-			...acc,
-			[camelToSnake(curr)]: R.is(Object, o[curr])
-				? recCamelCaseToSnakeCase(<Record<string, unknown>>o[curr])
-				: o[curr],
-		}),
-		<T>{}
-	);
+	o: Record<string, T> | Array<T>
+): T | Array<T> =>
+	!Array.isArray(o)
+		? Object.keys(o).reduce(
+				(acc, curr) => ({
+					...acc,
+					[camelToSnake(curr)]: R.is(Object, o[curr])
+						? recCamelCaseToSnakeCase(
+								<Record<string, unknown>>o[curr]
+						  )
+						: o[curr],
+				}),
+				<T>{}
+		  )
+		: o;
 
 //
 //
