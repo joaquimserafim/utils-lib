@@ -4,6 +4,12 @@ import * as R from "ramda";
 //
 //
 
+const isObject = (value: unknown): value is { [key: string]: unknown } =>
+	value !== null && typeof value === "object" && !Array.isArray(value);
+//
+//
+//
+
 export const camelCase = (str: string) =>
 	str
 		.replace(/_|-/g, " ")
@@ -43,22 +49,35 @@ export const camelToSnake = (word: string) =>
 // camelCase to snakeCase, object(s)
 //
 
-export const recCamelCaseToSnakeCase = <T = unknown>(
-	o: Record<string, T> | Array<T>
-): T | Array<T> =>
-	!Array.isArray(o)
-		? Object.keys(o).reduce(
-				(acc, curr) => ({
-					...acc,
-					[camelToSnake(curr)]: R.is(Object, o[curr])
-						? recCamelCaseToSnakeCase(
-								<Record<string, unknown>>o[curr]
-						  )
-						: o[curr],
-				}),
-				<T>{}
-		  )
-		: o;
+function recCamelCaseToSnakeCase<T>(
+	value: T
+): T extends { [key: string]: unknown }[]
+	? Array<{ [key: string]: unknown }>
+	: { [key: string]: unknown };
+
+function recCamelCaseToSnakeCase<T>(value: T): T {
+	if (Array.isArray(value)) {
+		return value.map((e) =>
+			isObject(e) ? recCamelCaseToSnakeCase(e) : e
+		) as T;
+	}
+
+	if (isObject(value)) {
+		return Object.keys(value).reduce(
+			(acc, curr) => ({
+				...acc,
+				[camelToSnake(curr)]: R.is(Object, value[curr])
+					? recCamelCaseToSnakeCase(value[curr])
+					: value[curr],
+			}),
+			{} as T
+		);
+	}
+
+	return value;
+}
+
+export { recCamelCaseToSnakeCase };
 
 //
 //

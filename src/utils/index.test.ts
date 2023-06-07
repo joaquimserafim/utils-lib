@@ -78,7 +78,7 @@ describe("testing utils lib", () => {
 		});
 	});
 
-	describe("camelToSnake wiht js objects", () => {
+	describe("recursive camelToSnake", () => {
 		test("should convert from camelCase to snakeCase - 1 level object", () => {
 			expect.hasAssertions();
 			expect(recCamelCaseToSnakeCase({ helloWorld: "123" })).toEqual({
@@ -95,12 +95,23 @@ describe("testing utils lib", () => {
 			});
 		});
 
-		test("should convert from camelCase to snakeCase - with arrays", () => {
+		test("should convert from camelCase to snakeCase - Array<string | number | boolean>", () => {
 			expect.hasAssertions();
 			expect(
 				recCamelCaseToSnakeCase({ helloWorld: { isToday: ["yes"] } })
 			).toEqual({
 				hello_world: { is_today: ["yes"] },
+			});
+		});
+
+		test("should convert from camelCase to snakeCase - Array<object>", () => {
+			expect.hasAssertions();
+			expect(
+				recCamelCaseToSnakeCase({
+					helloWorld: { arr: [{ foO: 1, baR: 2 }] },
+				})
+			).toEqual({
+				hello_world: { arr: [{ fo_o: 1, ba_r: 2 }] },
 			});
 		});
 	});
