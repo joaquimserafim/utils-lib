@@ -17,10 +17,15 @@ export const sendSMS = async (phoneNumber: string, message: string) =>
 //
 //
 
-export const publishToTopic = async <T>(topicArn: string, message: T) =>
+export const publishToTopic = async <T>(
+	topicArn: string,
+	subject: string,
+	message: T
+) =>
 	await client.send(
 		new PublishCommand({
 			TopicArn: topicArn,
+			Subject: subject,
 			Message:
 				typeof message === "string" ? message : JSON.stringify(message),
 		})

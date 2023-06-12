@@ -40,16 +40,16 @@ describe("testing sns lib", () => {
 		it("should return an error", async () => {
 			(client.send as jest.Mock).mockRejectedValueOnce("some error");
 
-			await expect(publishToTopic("12345678", "foo bar")).rejects.toEqual(
-				"some error"
-			);
+			await expect(
+				publishToTopic("12345678", "123", "foo bar")
+			).rejects.toEqual("some error");
 		});
 
 		it("should publish a message - string", async () => {
 			(client.send as jest.Mock).mockResolvedValue(sns.response);
 
 			await expect(
-				publishToTopic("12345678", "foo bar")
+				publishToTopic("12345678", "123", "foo bar")
 			).resolves.toEqual(sns.response);
 		});
 
@@ -57,7 +57,7 @@ describe("testing sns lib", () => {
 			(client.send as jest.Mock).mockResolvedValue(sns.response);
 
 			await expect(
-				publishToTopic("12345678", { foo: "bar" })
+				publishToTopic("12345678", "123", { foo: "bar" })
 			).resolves.toEqual(sns.response);
 		});
 	});
