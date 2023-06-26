@@ -1,11 +1,12 @@
-import { client } from "./client";
 import { PublishCommand } from "@aws-sdk/client-sns";
 
+import { client } from "./client";
+
 //
 //
 //
 
-export const sendSMS = async (phoneNumber: string, message: string) =>
+export const sendSms = async (phoneNumber: string, message: string) =>
 	await client.send(
 		new PublishCommand({
 			PhoneNumber: phoneNumber,

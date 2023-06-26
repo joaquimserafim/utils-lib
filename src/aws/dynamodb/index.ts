@@ -1,4 +1,3 @@
-import { client } from "./client";
 import {
 	GetCommand,
 	GetCommandInput,
@@ -11,6 +10,8 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { NativeAttributeBinary } from "@aws-sdk/util-dynamodb";
 export { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+
+import { client } from "./client";
 
 //
 // get table count

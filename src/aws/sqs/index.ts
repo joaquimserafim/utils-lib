@@ -1,9 +1,10 @@
-import { client } from "./client";
 import {
 	ReceiveMessageCommand,
 	SendMessageCommand,
 	SendMessageCommandInput,
 } from "@aws-sdk/client-sqs";
+
+import { client } from "./client";
 
 //
 //

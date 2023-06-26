@@ -12,3 +12,4 @@ export * as misc from "./misc";
 export * as sqs from "./sqs/index";
 export * as sns from "./sns/index";
 export * as s3 from "./s3/index";
+export * as ses from "./ses/index";
